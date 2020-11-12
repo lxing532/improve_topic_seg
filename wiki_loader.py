@@ -140,31 +140,7 @@ def read_wiki_file(path, word2vec, sent_bert_vec, remove_preface_segment=True, i
                         text.append(sentence)
             if data:
                 targets.append(len(data) - 1)
-    '''
-    token_ids, attn_mask = convert_into_ids(sentences_list, tokenizer, 100)
-    seg_num = 30
-    if token_ids.size()[0] > seg_num:
-        iter_num = math.ceil(token_ids.size()[0] / float(seg_num))
-        tmp_reps = []
-        for i in range(iter_num):
-            if i != iter_num - 1:
-                hidden_reps, _ = model(token_ids[i*seg_num:(i+1)*seg_num,:], attention_mask = attn_mask[i*seg_num:(i+1)*seg_num,:])
-                tmp_reps.append(hidden_reps[:,0].detach().cpu())
-                del hidden_reps
-                torch.cuda.empty_cache()
-            else:
-                hidden_reps, _ = model(token_ids[i*seg_num:,:], attention_mask = attn_mask[i*seg_num:,:])
-                tmp_reps.append(hidden_reps[:,0].detach().cpu())
-                del hidden_reps, token_ids, attn_mask
-                torch.cuda.empty_cache()
-        sent_bert_vec = torch.cat(tmp_reps,0)
-    else:
-        hidden_reps, _ = model(token_ids, attention_mask = attn_mask)
 
-        sent_bert_vec = hidden_reps[:,0].detach().cpu()
-        del token_ids, attn_mask, hidden_reps
-        torch.cuda.empty_cache()
-    '''
     return data, targets, path, sent_bert_vec
 
 
@@ -190,8 +166,6 @@ class WikipediaDataSet(Dataset):
         self.word2vec = word2vec
         self.high_granularity = high_granularity
         self.sent_bert = sent_bert
-        #self.model = BertModel.from_pretrained('/scratch/linzi/bert_model').to("cuda:0")
-        #self.tokenizer = BertTokenizer.from_pretrained('/scratch/linzi/bert_model')
 
     def __getitem__(self, index):
         path = self.textfiles[index]
