@@ -10,3 +10,10 @@ Please replace the these three files located at the root directory of the origin
 ## max_sentence_embedding.py
 This file is originally under the "models" folder, please replace the one in the original repo with the one provided by us.
 
+## BERT sentence embedding
+We use [bert-as-service](https://github.com/hanxiao/bert-as-service) to first generate the BERT sentence embeddings for each document, then we store all the documents' sentence embeddings into a .txt file. In order to use our code, you should also generate the BERT file first and then load it in run.py.
+To describe the structure of the BERT .txt file more clearly, let's use an example:
+
+Let's say we have a tiny corpus with two documents, each document has 5 sentences. 
+We first generate the BERT sentence embeddings for each document. Thus, we have two sets of embeddings, each set contains 5 sentence embeddings, with the dimension 768.
+Then, we put these two sets of embeddings into a .txt file, each embedding takes one line. We add a blank line between two documents. Thus, this .txt file will have 11 lines (5+1+5). 
